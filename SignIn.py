@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+
 # Function to log into gmail account given an EmailAccount object
 def getGmail(EmailAccount):
     # Added option to let the browser stay open and created webdriver.Chrome
@@ -75,6 +76,11 @@ class EmailAccount:
     def getPassword(self):
         return self.password
 
+    # method to print user name and password in text file format for
+    #   adding and deleting email
+    def getInfo(self):
+        return self.getAccount() + " " + self.getPassword() + "\n"
+
     # toString method to print both the account and password
     def toString(self):
         return "The account is " + self.getAccount() + " and the password is " + self.getPassword() + "."
@@ -101,11 +107,13 @@ def loadDictionary():
         print("Error occured reading file into dictionary.")
     emailFile.close()
 
+
 # Function to check if username is an email
 def isEmail(emailName):
         if "@" not in emailName:
             return True
         return False
+
 
 # function to add a new email to the email list
 def addEmail():
@@ -125,6 +133,23 @@ def addEmail():
             emailFile.close()
     except:
         print("Error occured please try again.")
+    
+
+def removeEmail():
+    print("Please type in the username of the email accounts to delete.")
+    remove = input("Username: ")
+    if remove not in emailList.keys():
+        print("Email is not in list. Please try again.")
+    try:
+        emailFile = open("Email_Accounts.txt", "w")
+        for account in emailList.values():
+            if remove != account.getAccount():
+                emailFile.write(account.getInfo())
+        emailFile.close()
+        print("Email successfully deleted.")
+    except:
+        print("Error occured while deleting email. Please try again.")
+
 
 
 # function to print all emails that are available to sign into
@@ -132,8 +157,8 @@ def checkList():
     # try catch block to print all emails in the email list dictionary
     try:
         print("----------------------Email List----------------------------")
-        for v in emailList.keys():
-            print(v)
+        for account in emailList.values():
+            print(account.getAccount())
         print("------------------------------------------------------------\n")
     except:
         print("Could not print out email list.\nPlease try again.")
@@ -163,6 +188,9 @@ def logIn():
         elif sys.argv[1] == "add": 
             addEmail()
             sys.exit()
+        elif sys.argv[1] == "delete":
+            removeEmail()
+            sys.exit()
         else:
             userName = sys.argv[1]
     except IndexError:
@@ -178,6 +206,7 @@ def logIn():
     #   from the "@" symbol to the end of the email
     userNameCount = 0
     if isEmail(userName):
+        print("This is not an email. Please try again.")
         sys.exit()
     for c in userName:
         if c == "@":
