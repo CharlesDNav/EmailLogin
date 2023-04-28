@@ -3,14 +3,14 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-
+# Run through .email_Command.sh in root dircectory
 # Function to log into gmail account given an EmailAccount object
 def getGmail(EmailAccount):
     # Added option to let the browser stay open and created webdriver.Chrome
     #   object to open chrome browser page to the gmail sign in page
     chromeOption = webdriver.ChromeOptions()
     chromeOption.add_experimental_option("detach", True)
-    browser = webdriver.Chrome('/Users/CharlesNavera/desktop/chromedriver', options=chromeOption)
+    browser = webdriver.Chrome('/Users/charles/desktop/Projects/EmailLogin/chromedriver_mac64/chromedriver', options=chromeOption)
     browser.get('https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&service=mail&sacu=1&rip=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin')
     browser.fullscreen_window()
 
@@ -34,7 +34,7 @@ def getGmail(EmailAccount):
 def getYahoo(EmailAccount):
     chromeOption = webdriver.ChromeOptions()
     chromeOption.add_experimental_option("detach", True)
-    browser = webdriver.Chrome('/Users/CharlesNavera/desktop/chromedriver', options=chromeOption)
+    browser = webdriver.Chrome('/Users/charles/desktop/chromedriver', options=chromeOption)
     browser.get('https://login.yahoo.com/config/login?.src=fpctx&.intl=us&.lang=en-US&.done=https%3A%2F%2Fwww.yahoo.com')
     browser.fullscreen_window()
 
@@ -110,9 +110,8 @@ def loadDictionary():
 
 # Function to check if username is an email
 def isEmail(emailName):
-        if "@" not in emailName:
-            return True
-        return False
+    return "@" in emailName
+    #|| -> or
 
 
 # function to add a new email to the email list
@@ -187,9 +186,6 @@ def logIn():
             sys.exit()
         elif sys.argv[1] == "add": 
             addEmail()
-            sys.exit()
-        elif sys.argv[1] == "delete":
-            removeEmail()
             sys.exit()
         else:
             userName = sys.argv[1]
